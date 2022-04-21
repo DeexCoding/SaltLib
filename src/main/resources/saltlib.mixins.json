@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.Deex.SaltLib.Mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "WorldMixin",
+    "BufferBuilderMixin",
+    "ChunkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

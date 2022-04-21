@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "saltlib",
+  "version": "${version}",
+  "name": "SaltLib",
+  "description": "Sodium alternative for legacy versions (1.3.2-1.13.2)",
+  "authors": 
+  [
+    "Deex"
+  ],
+  "contact": {
+    "issues": "https://github.com/DeexCoding/SaltLib/issues",
+    "sources": "https://github.com/DeexCoding/SaltLib"
+  },
+  "license": "zlib",
+  "icon": "assets/saltlib/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "me.Deex.SaltLib.SaltLibMod"
+    ]
+  },
+  "mixins": 
+  [
+    "saltlib.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.0",
+    "minecraft": "1.8.9"
+  },
+  "suggests": {
+    "another-mod": "not yet"
+  }
+}

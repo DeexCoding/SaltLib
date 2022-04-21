@@ -1,0 +1,16 @@
+.gradle/
+build/
+classes/
+out/
+
+run/
+
+#Visual Studio Code specific
+.settings/
+.vscode/
+.classpath/
+.project/
+bin/
+
+#MacOS specific
+*.DS_Store
