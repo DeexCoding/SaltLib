@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.include.com.google.common.primitives.Floats;
 
 import net.minecraft.block.Material;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +38,8 @@ public class ChunkMixin
     @Shadow
     @Final
     public int chunkZ;
+
+    //Currently slower thsn original implementation
 
     @Overwrite
     public void method_3923()

@@ -9,8 +9,7 @@
   "client": 
   [
     "WorldMixin",
-    "BufferBuilderMixin",
-    "ChunkMixin"
+    "BufferBuilderMixin"
   ],
   "injectors": 
   {
