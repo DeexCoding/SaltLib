@@ -15,5 +15,6 @@
   "injectors": 
   {
     "defaultRequire": 1
-  }
+  },
+  "refmap": "SaltLib-refmap.json"
 }

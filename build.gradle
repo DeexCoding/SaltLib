@@ -51,6 +51,12 @@ dependencies
 	//{
 	//	exclude module: "fabric-loader-1.8.9"
 	//}
+
+	if (System.getProperty("os.name").toLowerCase().contains("mac"))
+	{
+		implementation 'org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-2015-0209'
+		implementation 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209'
+	}
 }
 
 processResources 

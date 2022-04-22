@@ -20,7 +20,7 @@ public class WorldMixin
     private static final int MAX_POWER_FROM_OTHER_WIRE = 14;
 
     @Inject(method = "getReceivedRedstonePower", cancellable = true, at = @At(value = "HEAD"))
-    public void getReceivedRedstonePower(BlockPos pos, CallbackInfoReturnable<Integer> returnValue) 
+    private void getReceivedRedstonePower(BlockPos pos, CallbackInfoReturnable<Integer> returnValue) 
     {
         returnValue.setReturnValue(CalculatePower(pos));
     }

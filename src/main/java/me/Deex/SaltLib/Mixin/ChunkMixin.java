@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.include.com.google.common.primitives.Floats;
 
 import net.minecraft.block.Material;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +21,8 @@ public class ChunkMixin
     @Shadow
     private int field_4743; //Might not work
     
-    private int jInMethod_3923;
-    private int kInMethod_3923;
+    private int jInMethod_3923 = 0;
+    private float kInMethod_3923 = 0;
 
     @Shadow
     @Final
@@ -60,16 +61,15 @@ public class ChunkMixin
                 kInMethod_3923 -= 16;
             }
 
+            int k = (int)kInMethod_3923;
             int l = this.field_4743 / 256;
             ++this.field_4743;
-            ++jInMethod_3923;
-            kInMethod_3923 += _1over16;
             for (int m = 0; m < 16; ++m) 
             {
                 boolean bl;
-                BlockPos blockPos2 = blockPos.add(kInMethod_3923, (jInMethod_3923 << 4) + m, l);
-                bl = m == 0 || m == 15 || kInMethod_3923 == 0 || kInMethod_3923 == 15 || l == 0 || l == 15;
-                if ((this.chunkSections[jInMethod_3923] != null || !bl) && (this.chunkSections[jInMethod_3923] == null || this.chunkSections[jInMethod_3923].getBlockAtPos(kInMethod_3923, m, l).getMaterial() != Material.AIR)) continue;
+                BlockPos blockPos2 = blockPos.add(k, (jInMethod_3923 << 4) + m, l);
+                bl = m == 0 || m == 15 || k == 0 || k == 15 || l == 0 || l == 15;
+                if ((this.chunkSections[jInMethod_3923] != null || !bl) && (this.chunkSections[jInMethod_3923] == null || this.chunkSections[jInMethod_3923].getBlockAtPos(k, m, l).getMaterial() != Material.AIR)) continue;
                 for (Direction direction : Direction.values()) 
                 {
                     BlockPos blockPos3 = blockPos2.offset(direction);
@@ -78,6 +78,9 @@ public class ChunkMixin
                 }
                 this.world.method_8568(blockPos2);
             }
+
+            ++jInMethod_3923;
+            kInMethod_3923 += _1over16;
         }
     }
 }
