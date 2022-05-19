@@ -4,8 +4,6 @@ import net.fabricmc.api.ClientModInitializer;
 
 public class SaltLibMod implements ClientModInitializer 
 {
-	
-
 	@Override
 	public void onInitializeClient() 
 	{
