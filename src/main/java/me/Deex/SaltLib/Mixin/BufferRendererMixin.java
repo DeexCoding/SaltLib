@@ -7,13 +7,16 @@ import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
+import me.Deex.SaltLib.Renderer.MatrixStack;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormatElement;
+import net.minecraft.client.util.math.Matrix4f;
 
 @Mixin(BufferRenderer.class)
 public class BufferRendererMixin 
@@ -45,17 +48,21 @@ public class BufferRendererMixin
                         int startPos = byteBuffer.position();
 
                         //Will move back over to GPU once shaders will get implemented
+                        Vector4f vec = new Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
                         for (int i = 0; i < builder.getVertexCount(); i++)
                         {
                             byteBuffer.position(i * stride);
-                            float x = byteBuffer.getFloat();
-                            float y = byteBuffer.getFloat();
-                            float z = byteBuffer.getFloat();
+                            vec.x = byteBuffer.getFloat();
+                            vec.y = byteBuffer.getFloat();
+                            vec.z = byteBuffer.getFloat();
                             
+                            Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), vec, vec);
+                            Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), vec, vec);
+
                             byteBuffer.position(i * stride);
-                            byteBuffer.putFloat(x);
-                            byteBuffer.putFloat(y);
-                            byteBuffer.putFloat(z);
+                            byteBuffer.putFloat(vec.x);
+                            byteBuffer.putFloat(vec.y);
+                            byteBuffer.putFloat(vec.z);
                         }
 
                         byteBuffer.position(startPos);

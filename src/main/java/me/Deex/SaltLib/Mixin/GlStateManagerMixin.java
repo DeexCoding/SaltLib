@@ -1,11 +1,9 @@
 package me.Deex.SaltLib.Mixin;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -48,7 +46,7 @@ public class GlStateManagerMixin
         currentMatrixStack.Pop();
     }
 
-    /*@Overwrite
+    @Overwrite
     public static void translatef(float x, float y, float z) 
     {
         currentMatrixStack.Translate(new Vector3f(x, y, z));
@@ -58,7 +56,7 @@ public class GlStateManagerMixin
     public static void translated(double x, double y, double z) 
     {
         currentMatrixStack.Translate(new Vector3f((float)x, (float)y, (float)z));
-    }*/
+    }
 
     @Overwrite
     public static void getFloat(int mode, FloatBuffer buffer) 

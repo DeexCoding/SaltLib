@@ -1,12 +1,14 @@
 package me.Deex.SaltLib.Mixin;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import me.Deex.SaltLib.Renderer.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.texture.TextureManager;
@@ -46,10 +48,19 @@ public class TextRendererMixin
         float f = (float)m - 0.01f;
 
                         //Will move back over to GPU once shaders will get implemented
-        Vector3f v1 = new Vector3f(this.field_1149 + (float)l, this.field_1150, 0.0f);
-        Vector3f v2 = new Vector3f(this.field_1149 - (float)l, this.field_1150 + 7.99f, 0.0f);
-        Vector3f v3 = new Vector3f(this.field_1149 + f - 1.0f + (float)l, this.field_1150, 0.0f);
-        Vector3f v4 = new Vector3f(this.field_1149 + f - 1.0f - (float)l, this.field_1150 + 7.99f, 0.0f);
+        Vector4f v1 = new Vector4f(this.field_1149 + (float)l, this.field_1150, 0.0f, 0.0f);
+        Vector4f v2 = new Vector4f(this.field_1149 - (float)l, this.field_1150 + 7.99f, 0.0f, 0.0f);
+        Vector4f v3 = new Vector4f(this.field_1149 + f - 1.0f + (float)l, this.field_1150, 0.0f, 0.0f);
+        Vector4f v4 = new Vector4f(this.field_1149 + f - 1.0f - (float)l, this.field_1150 + 7.99f, 0.0f, 0.0f);
+
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v1, v1);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v1, v1);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v2, v2);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v2, v2);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v3, v3);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v3, v3);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v4, v4);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v4, v4);
 
         GL11.glBegin(5);
         GL11.glTexCoord2f((float)j / 128.0f, (float)k / 128.0f);
@@ -82,10 +93,19 @@ public class TextRendererMixin
         float n = bl ? 1.0f : 0.0f;
 
                         //Will move back over to GPU once shaders will get implemented
-        Vector3f v1 = new Vector3f(this.field_1149 + n, this.field_1150, 0.0f);
-        Vector3f v2 = new Vector3f(this.field_1149 - n, this.field_1150 + 7.99f, 0.0f);
-        Vector3f v3 = new Vector3f(this.field_1149 + m / 2.0f + n, this.field_1150, 0.0f);
-        Vector3f v4 = new Vector3f(this.field_1149 + m / 2.0f - n, this.field_1150 + 7.99f, 0.0f);
+        Vector4f v1 = new Vector4f(this.field_1149 + n, this.field_1150, 0.0f, 0.0f);
+        Vector4f v2 = new Vector4f(this.field_1149 - n, this.field_1150 + 7.99f, 0.0f, 0.0f);
+        Vector4f v3 = new Vector4f(this.field_1149 + m / 2.0f + n, this.field_1150, 0.0f, 0.0f);
+        Vector4f v4 = new Vector4f(this.field_1149 + m / 2.0f - n, this.field_1150 + 7.99f, 0.0f, 0.0f);
+
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v1, v1);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v1, v1);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v2, v2);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v2, v2);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v3, v3);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v3, v3);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v4, v4);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v4, v4);
 
         GL11.glBegin(5);
         GL11.glTexCoord2f(h / 256.0f, l / 256.0f);
