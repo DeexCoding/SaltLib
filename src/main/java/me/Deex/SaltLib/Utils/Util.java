@@ -1,14 +1,35 @@
 package me.Deex.SaltLib.Utils;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.util.vector.Matrix4f;
 
-public class MatrixUtil 
+public class Util 
 {
-    public static void Matrix4fToFloatBuffer(Matrix4f mat, FloatBuffer buffer)
+	public static void CopyBuffer(ByteBuffer from, ByteBuffer to)
+	{
+		from.position(0);
+
+		while (from.remaining() > 0)
+		{
+			to.put(from.get());
+		}
+	}
+
+	public static void CopyBuffer(FloatBuffer from, FloatBuffer to)
+	{
+		from.position(0);
+
+		while (from.remaining() > 0)
+		{
+			to.put(from.get());
+		}
+	}
+
+    public static void WriteMatrix4fIntoFloatBuffer(Matrix4f mat, FloatBuffer buffer)
     {
-		if (buffer.remaining() < 16 * Float.BYTES)
+		if (buffer.remaining() < 16)
 		{
 			throw new IllegalStateException("Not enough bytes remaining in buffer!");
 		}

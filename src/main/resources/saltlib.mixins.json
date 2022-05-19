@@ -8,8 +8,12 @@
   ],
   "client": 
   [
-    "WorldMixin",
-    "BufferBuilderMixin"
+    "GLStateManagerMixin",
+    "GLXMixin",
+    "BufferBuilderMixin",
+    "BufferRendererMixin",
+    "TextRendererMixin",
+    "WorldMixin"
   ],
   "injectors": 
   {

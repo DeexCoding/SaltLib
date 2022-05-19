@@ -39,6 +39,21 @@ public class MatrixStack
             {
                 return texture;
             }
+
+            case GL11.GL_MODELVIEW_MATRIX:
+            {
+                return modelview;
+            }
+
+            case GL11.GL_PROJECTION_MATRIX:
+            {
+                return projection;
+            }
+
+            case GL11.GL_TEXTURE_MATRIX:
+            {
+                return texture;
+            }
         }
 
         throw new IllegalStateException("Invalid [glId] in [MatrixStack.Get]!");

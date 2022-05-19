@@ -7,13 +7,18 @@ import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormatElement;
 
+@Mixin(BufferRenderer.class)
 public class BufferRendererMixin 
 {
+    @Overwrite
     public void draw(BufferBuilder builder) 
     {
         if (builder.getVertexCount() > 0) 
@@ -21,7 +26,7 @@ public class BufferRendererMixin
             int l;
             int j;
             VertexFormat vertexFormat = builder.method_9754();
-            int i = vertexFormat.method_10343();
+            int stride = vertexFormat.method_10343();
             ByteBuffer byteBuffer = builder.getByteBuffer();
             List<VertexFormatElement> list = vertexFormat.getElements();
 
@@ -37,27 +42,44 @@ public class BufferRendererMixin
                 {
                     case POSITION: 
                     {
-                        GL11.glVertexPointer(vertexFormatElement.getCount(), k, i, byteBuffer);
+                        int startPos = byteBuffer.position();
+
+                        //Will move back over to GPU once shaders will get implemented
+                        for (int i = 0; i < builder.getVertexCount(); i++)
+                        {
+                            byteBuffer.position(i * stride);
+                            float x = byteBuffer.getFloat();
+                            float y = byteBuffer.getFloat();
+                            float z = byteBuffer.getFloat();
+                            
+                            byteBuffer.position(i * stride);
+                            byteBuffer.putFloat(x);
+                            byteBuffer.putFloat(y);
+                            byteBuffer.putFloat(z);
+                        }
+
+                        byteBuffer.position(startPos);
+                        GL11.glVertexPointer(vertexFormatElement.getCount(), k, stride, byteBuffer);
                         GL11.glEnableClientState(32884);
                         continue block12;
                     }
                     case UV: 
                     {
                         GLX.gl13ClientActiveTexture(GLX.textureUnit + l);
-                        GL11.glTexCoordPointer(vertexFormatElement.getCount(), k, i, byteBuffer);
+                        GL11.glTexCoordPointer(vertexFormatElement.getCount(), k, stride, byteBuffer);
                         GL11.glEnableClientState(32888);
                         GLX.gl13ClientActiveTexture(GLX.textureUnit);
                         continue block12;
                     }
                     case COLOR: 
                     {
-                        GL11.glColorPointer(vertexFormatElement.getCount(), k, i, byteBuffer);
+                        GL11.glColorPointer(vertexFormatElement.getCount(), k, stride, byteBuffer);
                         GL11.glEnableClientState(32886);
                         continue block12;
                     }
                     case NORMAL: 
                     {
-                        GL11.glNormalPointer(k, i, byteBuffer);
+                        GL11.glNormalPointer(k, stride, byteBuffer);
                         GL11.glEnableClientState(32885);
                     }
                 }

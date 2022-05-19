@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GLX;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import me.Deex.SaltLib.Renderer.MatrixStack;
 
@@ -12,7 +13,7 @@ import me.Deex.SaltLib.Renderer.MatrixStack;
 public class GLXMixin 
 {
     @Inject(method = "createContext", at = @At("TAIL"))
-    public static void createContext() 
+    private static void createContext(CallbackInfo ci) 
     {
         MatrixStack.CreateStacks();
     }
