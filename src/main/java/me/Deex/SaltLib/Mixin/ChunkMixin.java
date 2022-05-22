@@ -41,7 +41,7 @@ public class ChunkMixin
 
     //Currently slower thsn original implementation
 
-    @Overwrite
+    /*@Overwrite
     public void method_3923()
     {
         BlockPos blockPos = new BlockPos(this.chunkX << 4, 0, this.chunkZ << 4);
@@ -83,5 +83,5 @@ public class ChunkMixin
             ++jInMethod_3923;
             kInMethod_3923 += _1over16;
         }
-    }
+    }*/
 }

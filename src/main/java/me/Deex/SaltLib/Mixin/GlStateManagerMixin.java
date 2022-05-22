@@ -9,12 +9,11 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import me.Deex.SaltLib.Renderer.MatrixStack;
 import me.Deex.SaltLib.Utils.Util;
+
 import net.minecraft.client.util.GlAllocationUtils;
 
 @Mixin(GlStateManager.class)
@@ -22,42 +21,55 @@ public class GlStateManagerMixin
 {
     private static MatrixStack currentMatrixStack;
 
-    @Inject(method = "matrixMode", at = @At("HEAD"))
-    private static void matrixMode(int mode, CallbackInfo ci) 
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void matrixMode(int mode) 
     {
         currentMatrixStack = MatrixStack.GetGLStack(mode);
     }
 
-    @Inject(method = "loadIdentity", at = @At("HEAD"))
-    private static void loadIdentity(CallbackInfo ci) 
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void loadIdentity() 
     {
         currentMatrixStack.SetIdentity();
     }
 
-    @Inject(method = "pushMatrix", at = @At("HEAD"))
-    private static void pushMatrix(CallbackInfo ci) 
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void pushMatrix() 
     {
         currentMatrixStack.Push();
     }
 
-    @Inject(method = "popMatrix", at = @At("HEAD"))
-    private static void popMatrix(CallbackInfo ci) 
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void popMatrix() 
     {
         currentMatrixStack.Pop();
     }
 
-    @Overwrite
-    public static void translatef(float x, float y, float z) 
-    {
-        currentMatrixStack.Translate(new Vector3f(x, y, z));
-    }
-
-    @Overwrite
-    public static void translated(double x, double y, double z) 
-    {
-        currentMatrixStack.Translate(new Vector3f((float)x, (float)y, (float)z));
-    }
-
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
     @Overwrite
     public static void getFloat(int mode, FloatBuffer buffer) 
     {
@@ -74,4 +86,82 @@ public class GlStateManagerMixin
         buffer.position(startPos);
     }
 
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void ortho(double l, double r, double b, double t, double n, double f) 
+    {
+        currentMatrixStack.Ortho((float)l, (float)r, (float)b, (float)t, (float)n, (float)f);
+    }
+
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void scalef(float x, float y, float z) 
+    {
+        currentMatrixStack.Scale(new Vector3f(x, y, z));
+    }
+
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void scaled(double x, double y, double z) 
+    {
+        currentMatrixStack.Scale(new Vector3f((float)x, (float)y, (float)z));
+    }
+
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void rotatef(float angle, float x, float y, float z) 
+    {
+        currentMatrixStack.Rotate(angle, new Vector3f(x, y, z));
+    }
+
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void translatef(float x, float y, float z) 
+    {
+        currentMatrixStack.Translate(new Vector3f(x, y, z));
+    }
+
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void translated(double x, double y, double z) 
+    {
+        currentMatrixStack.Translate(new Vector3f((float)x, (float)y, (float)z));
+    }
+
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
+    @Overwrite
+    public static void multiMatrix(FloatBuffer buffer) 
+    {
+        Matrix4f mat = new Matrix4f();
+        mat.load(buffer);
+        currentMatrixStack.Multiply(mat);
+    }
 }

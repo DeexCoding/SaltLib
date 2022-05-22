@@ -14,7 +14,7 @@ public class MatrixStack
     private static MatrixStack projection;
     private static MatrixStack texture;
 
-    public static void CreateStacks()
+    public static void CreateGLStacks()
     {
         modelview = new MatrixStack();
         projection = new MatrixStack();

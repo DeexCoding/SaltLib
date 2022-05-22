@@ -19,5 +19,5 @@
   {
     "defaultRequire": 1
   },
-  "refmap": "SaltLib-refmap.json"
+  "refmap": "saltlib-refmap.json"
 }

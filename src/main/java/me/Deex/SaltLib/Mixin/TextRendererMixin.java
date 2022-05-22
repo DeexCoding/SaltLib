@@ -36,7 +36,11 @@ public class TextRendererMixin
     @Shadow
     private float field_1150;
 
-
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
     @Overwrite
     private float method_953(int i, boolean bl) 
     {
@@ -48,18 +52,19 @@ public class TextRendererMixin
         float f = (float)m - 0.01f;
 
                         //Will move back over to GPU once shaders will get implemented
-        Vector4f v1 = new Vector4f(this.field_1149 + (float)l, this.field_1150, 0.0f, 0.0f);
-        Vector4f v2 = new Vector4f(this.field_1149 - (float)l, this.field_1150 + 7.99f, 0.0f, 0.0f);
-        Vector4f v3 = new Vector4f(this.field_1149 + f - 1.0f + (float)l, this.field_1150, 0.0f, 0.0f);
-        Vector4f v4 = new Vector4f(this.field_1149 + f - 1.0f - (float)l, this.field_1150 + 7.99f, 0.0f, 0.0f);
+        Vector4f v1 = new Vector4f(this.field_1149 + (float)l, this.field_1150, 0.0f, 1.0f);
+        Vector4f v2 = new Vector4f(this.field_1149 - (float)l, this.field_1150 + 7.99f, 0.0f, 1.0f);
+        Vector4f v3 = new Vector4f(this.field_1149 + f - 1.0f + (float)l, this.field_1150, 0.0f, 1.0f);
+        Vector4f v4 = new Vector4f(this.field_1149 + f - 1.0f - (float)l, this.field_1150 + 7.99f, 0.0f, 1.0f);
 
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v1, v1);
-        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v1, v1);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v2, v2);
-        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v2, v2);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v3, v3);
-        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v3, v3);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v4, v4);
+        
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v1, v1);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v2, v2);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v3, v3);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v4, v4);
 
         GL11.glBegin(5);
@@ -75,6 +80,11 @@ public class TextRendererMixin
         return m;
     }
 
+    /**
+     * what is javadoc
+     * @author me
+     * @reason mod needs functionality
+     */
     @Overwrite
     private float method_950(char c, boolean bl) 
     {
@@ -93,18 +103,19 @@ public class TextRendererMixin
         float n = bl ? 1.0f : 0.0f;
 
                         //Will move back over to GPU once shaders will get implemented
-        Vector4f v1 = new Vector4f(this.field_1149 + n, this.field_1150, 0.0f, 0.0f);
-        Vector4f v2 = new Vector4f(this.field_1149 - n, this.field_1150 + 7.99f, 0.0f, 0.0f);
-        Vector4f v3 = new Vector4f(this.field_1149 + m / 2.0f + n, this.field_1150, 0.0f, 0.0f);
-        Vector4f v4 = new Vector4f(this.field_1149 + m / 2.0f - n, this.field_1150 + 7.99f, 0.0f, 0.0f);
+        Vector4f v1 = new Vector4f(this.field_1149 + n, this.field_1150, 0.0f, 1.0f);
+        Vector4f v2 = new Vector4f(this.field_1149 - n, this.field_1150 + 7.99f, 0.0f, 1.0f);
+        Vector4f v3 = new Vector4f(this.field_1149 + m / 2.0f + n, this.field_1150, 0.0f, 1.0f);
+        Vector4f v4 = new Vector4f(this.field_1149 + m / 2.0f - n, this.field_1150 + 7.99f, 0.0f, 1.0f);
 
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v1, v1);
-        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v1, v1);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v2, v2);
-        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v2, v2);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v3, v3);
-        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v3, v3);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW_MATRIX).GetTop(), v4, v4);
+
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v1, v1);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v2, v2);
+        Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v3, v3);
         Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION_MATRIX).GetTop(), v4, v4);
 
         GL11.glBegin(5);

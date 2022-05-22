@@ -15,6 +15,6 @@ public class GLXMixin
     @Inject(method = "createContext", at = @At("TAIL"))
     private static void createContext(CallbackInfo ci) 
     {
-        MatrixStack.CreateStacks();
+        MatrixStack.CreateGLStacks();
     }
 }
