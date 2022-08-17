@@ -14,13 +14,13 @@ import net.minecraft.client.render.VertexFormatElement;
 public class BufferBuilderMixin 
 {
     @Shadow
-    private VertexFormat field_10653; //The format of the vertex
+    private VertexFormat format;
 
     @Shadow
-    private VertexFormatElement element; //The current element more specifically
+    private VertexFormatElement currentElement;
 
     @Shadow
-    private int field_10648; //The element'sid
+    private int currentElementId;
 
     /**
      * what is javadoc
@@ -28,20 +28,20 @@ public class BufferBuilderMixin
      * @reason mod needs functionality
      */
     @Overwrite
-    private void method_9758() //Basically gets the next element in the buffer
+    private void nextElement() //Basically gets the next element in the buffer
     {
-        List<VertexFormatElement> elements = field_10653.getElements();
+        List<VertexFormatElement> elements = format.getElements();
 
         do
         {
-            this.field_10648++;
-            if (this.field_10648 >= elements.size()) 
+            this.currentElementId++;
+            if (this.currentElementId >= elements.size()) 
             {
-                this.field_10648 -= elements.size();
+                this.currentElementId -= elements.size();
             }
 
-            element = elements.get(field_10648);
+            currentElement = elements.get(currentElementId);
 
-        } while (element.getType() == VertexFormatElement.Type.PADDING);
+        } while (currentElement.getType() == VertexFormatElement.Type.PADDING);
     }
 }

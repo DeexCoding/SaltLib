@@ -9,7 +9,6 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import me.Deex.SaltLib.Renderer.MatrixStack;
 import me.Deex.SaltLib.Utils.Util;

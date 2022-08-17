@@ -8,11 +8,9 @@
   ],
   "client": 
   [
-    "GLStateManagerMixin",
-    "GLXMixin",
     "BufferBuilderMixin",
     "BufferRendererMixin",
-    "TextRendererMixin",
+    "GLXMixin",
     "WorldMixin"
   ],
   "injectors": 
