@@ -104,7 +104,7 @@ public class MatrixStack
 
     public void Rotate(float angle, Vector3f axis)
     {
-        Matrix4f.rotate((float)Math.toRadians(angle), (Vector3f)axis.normalise(), stack.get(0), stack.get(0));
+        Matrix4f.rotate((float)Math.toRadians((float)angle), (Vector3f)axis.normalise(), stack.get(0), stack.get(0));
     }
 
     public void Scale(Vector3f scale)

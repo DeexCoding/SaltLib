@@ -10,8 +10,11 @@
   [
     "BufferBuilderMixin",
     "BufferRendererMixin",
+    "GlStateManagerMixin",
     "GLXMixin",
-    "WorldMixin"
+    "TextRendererMixin",
+    "WorldMixin",
+    "WorldRendererMixin"
   ],
   "injectors": 
   {

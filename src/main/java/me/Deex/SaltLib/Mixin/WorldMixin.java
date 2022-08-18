@@ -2,6 +2,7 @@ package me.Deex.SaltLib.Mixin;
 
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -13,7 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 @Mixin(World.class)
-public class WorldMixin 
+public abstract class WorldMixin 
 {
     private static final int MIN_POWER_LEVEL = 0;
     private static final int MAX_POWER_LEVEL = 15;
@@ -154,4 +155,5 @@ public class WorldMixin
 
         return power;
     }
+
 }
