@@ -10,15 +10,13 @@
   [
     "BufferBuilderMixin",
     "BufferRendererMixin",
-    "GlStateManagerMixin",
-    "GLXMixin",
-    "TextRendererMixin",
-    "WorldMixin",
-    "WorldRendererMixin"
+    "MinecraftClientMixin",
+    "VideoOptionsScreenMixin",
+    "WorldMixin"
   ],
   "injectors": 
   {
     "defaultRequire": 1
   },
-  "refmap": "saltlib-refmap.json"
+  "refmap": "SaltLib-refmap.json"
 }

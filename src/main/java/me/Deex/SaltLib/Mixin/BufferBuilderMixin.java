@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 import me.Deex.SaltLib.Renderer.MatrixStack;
 import net.minecraft.client.render.BufferBuilder;
@@ -18,7 +19,7 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormatElement;
 
 @Mixin(BufferBuilder.class)
-public class BufferBuilderMixin 
+public abstract class BufferBuilderMixin 
 {
     @Shadow
     private ByteBuffer buffer;
@@ -44,13 +45,21 @@ public class BufferBuilderMixin
     @Shadow
     private double offsetZ;
 
+    @Shadow
+    private boolean building;
+
+    private int method_9757() 
+    {
+        return this.vertexCount * this.format.getVertexSizeInteger();
+    }
+
     /**
      * what is javadoc
      * @author me
      * @reason mod needs functionality
      */
     @Overwrite
-    private void nextElement() //Basically gets the next element in the buffer
+    private void nextElement()
     {
         List<VertexFormatElement> elements = format.getElements();
 
@@ -67,11 +76,50 @@ public class BufferBuilderMixin
         } while (currentElement.getType() == VertexFormatElement.Type.PADDING);
     }
 
-    
+    @Shadow
+    private int drawMode;
+
+    @Shadow
+    private boolean textured;
+
+    @Shadow
+    public abstract void reset();
+
+    @Overwrite
+    public void begin(int drawMode, VertexFormat format) 
+    {
+        if (this.building) 
+        {
+            return; //Don't throw an error idiot
+        }
+
+        this.building = true;
+        this.reset();
+        this.drawMode = drawMode;
+        this.format = format;
+        this.currentElement = format.get(this.currentElementId);
+        this.textured = false;
+        this.buffer.limit(this.buffer.capacity());
+    }
+
+    @Overwrite
+    public void end() 
+    {
+        if (!this.building) 
+        {
+            return; //Have you heard of assertions?
+        }
+        
+        this.building = false;
+        this.buffer.position(0);
+        this.buffer.limit(this.method_9757() * 4);
+    }
+
+
     //The matrix tranforms are not exact functionaltiy, since OpenGL transforms the verticies with the matrix stack once 
     //it is requested to be drawn or glBegin has been called
 
-    @Overwrite
+    /*@Overwrite
     public BufferBuilder vertex(double x, double y, double z) 
     {
         int i = this.vertexCount * this.format.getVertexSize() + this.format.getIndex(this.currentElementId);
@@ -170,6 +218,7 @@ public class BufferBuilderMixin
         return (BufferBuilder)(Object)this;
     }
 
+    @Overwrite
     public BufferBuilder texture2(int u, int v) 
     {
         //TODO: Call to texture instead
@@ -215,4 +264,5 @@ public class BufferBuilderMixin
         this.nextElement();
         return (BufferBuilder)(Object)this;
     }
+    /**/
 }

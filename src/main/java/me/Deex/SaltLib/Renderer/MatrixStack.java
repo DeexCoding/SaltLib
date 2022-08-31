@@ -64,7 +64,7 @@ public class MatrixStack
     MatrixStack()
     {
         stack = Lists.newArrayList();
-        stack.add(new Matrix4f());
+        stack.add(0, new Matrix4f());
     }
 
     public Matrix4f GetTop()

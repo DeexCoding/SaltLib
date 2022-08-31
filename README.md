@@ -7,3 +7,6 @@ SaltLib aims to be an alternative of the Sodium mod for Minecraft, but for legac
 
 **Performance:**
   idk try it out
+
+**Requirements:**
+  A gpu (can be integrated) made after 2008

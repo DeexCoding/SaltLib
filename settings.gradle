@@ -13,7 +13,5 @@ pluginManagement
 			name = 'Jitpack'
 			url = 'https://jitpack.io'
 		}
-		
-        gradlePluginPortal()
 	}
 }
