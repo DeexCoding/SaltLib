@@ -1,31 +1,34 @@
 package me.Deex.SaltLib.Debug;
 
 import java.io.FileOutputStream;
-
-import javax.swing.filechooser.FileSystemView;
+import java.util.concurrent.Semaphore;
 
 public class Instrumentor 
 {
     private static FileOutputStream out;
-    private static int profileCount;
-
-    private static final String desktopPath = 
-        FileSystemView.getFileSystemView().getHomeDirectory().getPath().concat("/Desktop/");
+    private static Semaphore profileWriteMutex = new Semaphore(1);
+    private static boolean startWithComma = false;
 
     public static void BeginSession(String name)
     {
-        try
+        new Thread(() -> 
         {
-            out = new FileOutputStream(desktopPath.concat(name).concat(".json"));
-            WriteHeader();
-        }
-        catch (Exception e)
-        {
+            try
+            {
+                out = new FileOutputStream(name.concat(".json"));
+                WriteHeader();
+                startWithComma = false;
+            }
+            catch (Exception e)
+            {
+                System.out.println("[SaltLib] Could not initalize a profiling session!");
+                e.printStackTrace();
+            }
 
-        }
+        }).start();
     }
 
-    public static void EndSession(String name)
+    public static void EndSession()
     {
         try
         {
@@ -36,8 +39,6 @@ public class Instrumentor
         {
 
         }
-
-        profileCount = 0;
     }
 
     private static void WriteHeader()
@@ -66,40 +67,49 @@ public class Instrumentor
         }
     }
 
-    public static void WriteProfile(String name, long start, long end, long threadID)
+    public synchronized static void WriteProfile(String name, long start, long end, long threadID)
     {
-        if (profileCount > 0)
+        try
         {
+            StringBuilder stringBuild = new StringBuilder();
+            
+            if (startWithComma)
+            {
+                stringBuild.append(",");
+            }
+
+            stringBuild.append("{");
+            stringBuild.append("\"cat\":\"function\",");
+            stringBuild.append("\"dur\":".concat(String.valueOf(end - start)).concat(","));
+            stringBuild.append("\"name\":\"".concat(name).concat("\","));
+            stringBuild.append("\"ph\":\"X\",");
+            stringBuild.append("\"pid\":0,");
+            stringBuild.append("\"tid\":".concat(String.valueOf(threadID)).concat(","));
+            stringBuild.append("\"ts\":".concat(String.valueOf(start)));
+            stringBuild.append("}");
+            
+            profileWriteMutex.acquire();
+
             try
             {
-                out.write(",".getBytes());
+                out.write(stringBuild.toString().getBytes());
+                out.flush();
+                startWithComma = true;
             }
             catch (Exception e)
             {
-
+                System.out.println("[SaltLib] Failed to write to the profiling output stream!");
+                e.printStackTrace();
             }
         }
-        
-        profileCount++;
-
-        try
+        catch (InterruptedException e)
         {
-            out.write("{".getBytes());
-            out.write("\"cat\":\"function\",".getBytes());
-            out.write("\"dur\":".concat(String.valueOf(end - start)).concat(",").getBytes());
-            out.write("\"name\":\"".concat(name).concat("\",").getBytes());
-            out.write("\"ph\":\"X\",".getBytes());
-            out.write("\"pid\":0,".getBytes());
-            out.write("\"tid\":".concat(String.valueOf(threadID)).concat(",").getBytes());
-            out.write("\"ts\":".concat(String.valueOf(start)).getBytes());
-            out.write("}".getBytes());
-    
-            out.flush();
+            System.out.println("[SaltLib] Failed to mutex!");
+            e.printStackTrace();
         }
-        catch (Exception e)
+        finally
         {
-
+            profileWriteMutex.release();
         }
-
     }
 }

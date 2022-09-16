@@ -1,17 +1,15 @@
 package me.Deex.SaltLib.Mixin;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import me.Deex.SaltLib.Renderer.CustomBufferRenderer;
-import me.Deex.SaltLib.Renderer.GhostBufferBuilder;
+import me.Deex.SaltLib.Renderer.BufferBuilderRenderData;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.ModelBox;
 import net.minecraft.client.render.Tessellator;
@@ -24,8 +22,7 @@ import net.minecraft.util.math.Vec3d;
 @Mixin(ModelPart.class)
 public class ModelPartMixin 
 {
-    private GhostBufferBuilder ghostBufferBuilder;
-    private BufferBuilder customBufferBuilder = new BufferBuilder(1024);
+    private BufferBuilderRenderData bufferBuilderData;
 
     @Shadow
     private boolean field_1611;
@@ -72,6 +69,7 @@ public class ModelPartMixin
     @Shadow
     public float field_5144;
 
+    //TODO: Works in runClient, doesnt work in release, why?
     public void render(float scale) 
     {
         if (this.field_1605) 
@@ -181,46 +179,10 @@ public class ModelPartMixin
     {
         this.field_1612 = 4;
 
-        //GL11.glNewList(this.field_1612, 4864); //GL_COMPILE
-        /*BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(7, VertexFormats.ENTITY);
         for (int i = 0; i < this.cuboids.size(); ++i) 
         {
-            ModelBox cubiod = this.cuboids.get(i);
-
-            for (int i2 = 0; i2 < ((ModelBoxAccessor)cubiod).getQuads().length; ++i2) 
-            {
-                TexturedQuad quad = ((ModelBoxAccessor)cubiod).getQuads()[i2];
-                
-                Vec3d vec3d = ((TexturedQuadAccessor)quad).getPositions()[1].position.reverseSubtract(((TexturedQuadAccessor)quad).getPositions()[0].position);
-                Vec3d vec3d2 = ((TexturedQuadAccessor)quad).getPositions()[1].position.reverseSubtract(((TexturedQuadAccessor)quad).getPositions()[2].position);
-                Vec3d vec3d3 = vec3d2.crossProduct(vec3d).normalize();
-                float f = (float)vec3d3.x;
-                float g = (float)vec3d3.y;
-                float h = (float)vec3d3.z;
-                if (((TexturedQuadAccessor)quad).getField_1507()) 
-                {
-                    f = -f;
-                    g = -g;
-                    h = -h;
-                }
-                for (int i3 = 0; i3 < 4; ++i3) 
-                {
-                    TexturePosition texturePosition = ((TexturedQuadAccessor)quad).getPositions()[i3];
-                    bufferBuilder.vertex(texturePosition.position.x * (double)scale, texturePosition.position.y * (double)scale, texturePosition.position.z * (double)scale).texture(texturePosition.u, texturePosition.v).normal(f, g, h).next();
-                }
-            }
-        }
-        
-        bufferBuilder.end();
-        ghostBufferBuilder = new GhostBufferBuilder(bufferBuilder);
-        bufferBuilder.reset();*/
-        
-        //GL11.glEndList();
-        customBufferBuilder.begin(7, VertexFormats.ENTITY);
-        for (int i = 0; i < this.cuboids.size(); ++i) 
-        {
-            //this.cuboids.get(i).draw(customBufferBuilder, scale);
             ModelBox currentCuboid = cuboids.get(i);
 
             for (int i2 = 0; i2 < ((ModelBoxAccessor)currentCuboid).getQuads().length; ++i2) 
@@ -242,25 +204,29 @@ public class ModelPartMixin
                 for (int i3 = 0; i3 < 4; ++i3) 
                 {
                     TexturePosition texturePosition = ((TexturedQuadAccessor)currentQuad).getPositions()[i3];
-                    customBufferBuilder.vertex(texturePosition.position.x * (double)scale, texturePosition.position.y * (double)scale, texturePosition.position.z * (double)scale).texture(texturePosition.u, texturePosition.v).normal(f, g, h).next();
+                    bufferBuilder.vertex(texturePosition.position.x * (double)scale, texturePosition.position.y * (double)scale, texturePosition.position.z * (double)scale).texture(texturePosition.u, texturePosition.v).normal(f, g, h).next();
                 }
             }
         }
+        
+        bufferBuilder.end();
 
-        customBufferBuilder.end();
-        ghostBufferBuilder = new GhostBufferBuilder(customBufferBuilder);
-        customBufferBuilder.reset();
+        if (bufferBuilderData == null)
+        {
+            bufferBuilderData = new BufferBuilderRenderData(bufferBuilder);
+        }
+        else
+        {
+            bufferBuilderData.SetData(bufferBuilder);
+        }
 
-        /*BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        for (int i = 0; i < this.cuboids.size(); ++i) {
-            this.cuboids.get(i).draw(bufferBuilder, scale);
-        }*/
+        bufferBuilder.reset();
 
         this.field_1611 = true;
     }
 
     private void CallListField1612()
     {
-        CustomBufferRenderer.DrawNoReset(ghostBufferBuilder);
+        CustomBufferRenderer.DrawNoReset(bufferBuilderData);
     }
 }

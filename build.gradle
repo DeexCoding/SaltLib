@@ -1,8 +1,9 @@
 plugins 
 {
 	id 'java'
-	id 'fabric-loom' version "0.12-SNAPSHOT" // To use chocoloom, change the version to a commit hash
+	id 'fabric-loom' version "1.0-SNAPSHOT"
 	id 'maven-publish'
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -15,6 +16,7 @@ group = project.maven_group
 repositories 
 {
 	mavenCentral()
+    maven { url "https://jitpack.io" }
 	maven 
 	{
 		name = "legacy-fabric"
@@ -33,7 +35,7 @@ loom
 	setIntermediaryUrl('https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1$s/intermediary-%1$s-v2.jar');
 	
 	// Only needed for versions not available from vanilla launcher by default.
-	// customMinecraftManifest.set("https://meta.legacyfabric.net/v2/manifest/${minecraft_version}")
+	customMinecraftManifest.set("https://meta.legacyfabric.net/v2/manifest/${minecraft_version}")
 
 	// Required by 1.7.x
 	// runs 
@@ -145,6 +147,11 @@ jar
 	{
 		rename { "${it}_${project.archivesBaseName}" }
 	}
+}
+
+shadowJar
+{
+	relocate 'org.lwjgl', "dependencies.org.lwjgl"
 }
 
 // configure the maven publication

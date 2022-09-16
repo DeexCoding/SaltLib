@@ -10,9 +10,13 @@
   [
     "BufferBuilderMixin",
     "BufferRendererMixin",
+    "ChunkRenderHelperImplMixin",
     "MinecraftClientMixin",
+    "ModelBoxAccessor",
+    "TexturedQuadAccessor",
     "VideoOptionsScreenMixin",
-    "WorldMixin"
+    "WorldMixin",
+    "WorldRendererMixin"
   ],
   "injectors": 
   {

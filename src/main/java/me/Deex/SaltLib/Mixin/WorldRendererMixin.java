@@ -19,7 +19,6 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.GlAllocationUtils;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -75,7 +74,8 @@ public class WorldRendererMixin
     private VertexFormat field_10824;
 
     @Overwrite
-    public void method_9891(float f, int i) {
+    public void method_9891(float f, int i) 
+    {
         float w;
         float v;
         int u;
@@ -83,11 +83,13 @@ public class WorldRendererMixin
         float s;
         float o;
         float n;
-        if (this.client.world.dimension.getType() == 1) {
+        if (this.client.world.dimension.getType() == 1) 
+        {
             this.method_9922();
             return;
         }
-        if (!this.client.world.dimension.canPlayersSleep()) {
+        if (!this.client.world.dimension.canPlayersSleep()) 
+        {
             return;
         }
         GlStateManager.disableTexture();
@@ -108,15 +110,15 @@ public class WorldRendererMixin
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
-        GlStateManager.color3f(g, h, j);
+        GlStateManager.color3f(g, h, j); //Not sure
         if (this.field_10817) 
         {
             this.field_10826.bind();
-            GL11.glEnableClientState(32884);
+            //GL11.glEnableClientState(32884); //Position
             GL11.glVertexPointer(3, 5126, 12, 0L);
             this.field_10826.draw(7);
             this.field_10826.unbind();
-            GL11.glDisableClientState(32884);
+            //GL11.glDisableClientState(32884); //Position
         } 
         else 
         {
@@ -198,11 +200,11 @@ public class WorldRendererMixin
             if (this.field_10817) 
             {
                 this.starsBuffer.bind();
-                GL11.glEnableClientState(32884);
+                //GL11.glEnableClientState(32884); //Position
                 GL11.glVertexPointer(3, 5126, 12, 0L);
                 this.starsBuffer.draw(7);
                 this.starsBuffer.unbind();
-                GL11.glDisableClientState(32884);
+                //GL11.glDisableClientState(32884); //Position
             } 
             else 
             {
@@ -225,11 +227,11 @@ public class WorldRendererMixin
             if (this.field_10817) 
             {
                 this.field_10827.bind();
-                GL11.glEnableClientState(32884);
+                //GL11.glEnableClientState(32884); //Position
                 GL11.glVertexPointer(3, 5126, 12, 0L);
                 this.field_10827.draw(7);
                 this.field_10827.unbind();
-                GL11.glDisableClientState(32884);
+                //GL11.glDisableClientState(32884); //Position
             } 
             else 
             {
@@ -276,6 +278,7 @@ public class WorldRendererMixin
         GlStateManager.popMatrix();
         GlStateManager.enableTexture();
         GlStateManager.depthMask(true);
+
     }
 
     @Shadow
@@ -283,9 +286,9 @@ public class WorldRendererMixin
     {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        if (this.field_10827 != null) 
+        if (this.field_10827 == null) 
         {
-            this.field_10827.delete();
+            this.field_10827 = new VertexBuffer(this.field_10824);
         }
         if (this.field_1925 >= 0) 
         {
@@ -294,7 +297,6 @@ public class WorldRendererMixin
         }
         if (this.field_10817) 
         {
-            this.field_10827 = new VertexBuffer(this.field_10824);
             this.renderSkyHalf(bufferBuilder, -16.0f, true);
             bufferBuilder.end();
             bufferBuilder.reset();
@@ -306,6 +308,7 @@ public class WorldRendererMixin
             //tessellator.draw();
             //GL11.glEndList();
         }
+
     }
 
     private void CallListField1925()
@@ -317,12 +320,13 @@ public class WorldRendererMixin
     }
 
     @Overwrite
-    private void method_9920() {
+    private void method_9920() 
+    {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        if (this.field_10826 != null) 
+        if (this.field_10826 == null) 
         {
-            this.field_10826.delete();
+            this.field_10826 = new VertexBuffer(this.field_10824);
         }
         if (this.field_1924 >= 0) 
         {
@@ -331,7 +335,6 @@ public class WorldRendererMixin
         }
         if (this.field_10817) 
         {
-            this.field_10826 = new VertexBuffer(this.field_10824);
             this.renderSkyHalf(bufferBuilder, 16.0f, false);
             bufferBuilder.end();
             bufferBuilder.reset();
@@ -359,9 +362,10 @@ public class WorldRendererMixin
     {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        if (this.starsBuffer != null)
+
+        if (this.starsBuffer == null)
         {
-            this.starsBuffer.delete();
+            this.starsBuffer = new VertexBuffer(this.field_10824);
         }
         if (this.field_1923 >= 0) 
         {
@@ -370,7 +374,6 @@ public class WorldRendererMixin
         }
         if (this.field_10817) 
         {
-            this.starsBuffer = new VertexBuffer(this.field_10824);
             this.renderStars(bufferBuilder);
             bufferBuilder.end();
             bufferBuilder.reset();
@@ -378,14 +381,15 @@ public class WorldRendererMixin
         } 
         else 
         {
-            this.field_1923 = GlAllocationUtils.genLists(1);
-            GlStateManager.pushMatrix();
+            this.field_1923 = 5;
+            //GlStateManager.pushMatrix();
             //GL11.glNewList(this.field_1923, 4864); //GL_COMPILE
             //this.renderStars(bufferBuilder); //Doesn't contain gl calls?
             //tessellator.draw();
             //GL11.glEndList();
-            GlStateManager.popMatrix();
+            //GlStateManager.popMatrix();
         }
+
     }
 
     private void CallListField1923()
@@ -420,14 +424,12 @@ public class WorldRendererMixin
             double s = random.nextDouble() * Math.PI * 2.0;
             double t = Math.sin(s);
             double u = Math.cos(s);
-            for (int v = 0; v < 4; ++v) {
-                double ab;
-                double w = 0.0;
+            for (int v = 0; v < 4; ++v) 
+            {
                 double x = (double)((v & 2) - 1) * g;
                 double y = (double)((v + 1 & 2) - 1) * g;
-                double z = 0.0;
                 double aa = x * u - y * t;
-                double ac = ab = y * u + x * t;
+                double ac = y * u + x * t;
                 double ad = aa * q + 0.0 * r;
                 double ae = 0.0 * q - aa * r;
                 double af = ae * n - ac * o;
