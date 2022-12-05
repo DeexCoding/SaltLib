@@ -42,7 +42,7 @@ public abstract class BufferBuilderMixin
     @Shadow
     private boolean building;
 
-    private int method_9757() 
+    public int method_9757() 
     {
         return this.vertexCount * this.format.getVertexSizeInteger();
     }
