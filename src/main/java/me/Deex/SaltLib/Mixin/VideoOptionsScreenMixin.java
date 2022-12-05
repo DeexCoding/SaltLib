@@ -32,7 +32,7 @@ public class VideoOptionsScreenMixin extends Screen
     @Final
     private static GameOptions.Option[] OPTIONS;
 
-    @Overwrite
+    /* @Overwrite
     public void init() {
         this.title = I18n.translate("options.videoTitle", new Object[0]);
         this.buttons.clear();
@@ -46,6 +46,6 @@ public class VideoOptionsScreenMixin extends Screen
             ++i;
         }
         this.list = new OptionPairWidget(this.client, this.width, this.height, 32, this.height - 32, 25, options);
-    }
-
+    }*/
+    // This might be improved in future.
 }
