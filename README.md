@@ -9,7 +9,7 @@ Might not compatible with Optifine in future
 
 **Performance:**
   idk try it out
-  seems like only 10% with modern devices but might have more improvement with Inter Intergrated GPU
+  seems like only 10% with modern devices but might have more improvement with Intel Intergrated GPU
 
 **Requirements:**
   A gpu (can be integrated) made after 2008
