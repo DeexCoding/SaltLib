@@ -25,10 +25,10 @@ public class ModelPartMixin
     private BufferBuilderRenderData bufferBuilderData;
 
     @Shadow
-    private boolean field_1611;
+    private boolean compiledList;
 
     @Shadow
-    private int field_1612;
+    private int glList;
 
     @Shadow
     public List<ModelBox> cuboids;
@@ -37,7 +37,7 @@ public class ModelPartMixin
     public List<ModelPart> modelList;
 
     @Shadow
-    public boolean field_1605;
+    public boolean hide;
     
     @Shadow
     public boolean visible;
@@ -61,18 +61,18 @@ public class ModelPartMixin
     public float posZ;
 
     @Shadow
-    public float field_5142;
+    public float offsetX;
 
     @Shadow
-    public float field_5143;
+    public float offsetY;
 
     @Shadow
-    public float field_5144;
+    public float offsetZ;
 
     //TODO: Works in runClient, doesnt work in release, why?
     public void render(float scale) 
     {
-        if (this.field_1605) 
+        if (this.hide) 
         {
             return;
         }
@@ -80,11 +80,11 @@ public class ModelPartMixin
         {
             return;
         }
-        if (!this.field_1611) 
+        if (!this.compiledList) 
         {
-            this.method_1196(scale);
+            this.compileList(scale);
         }
-        GlStateManager.translatef(this.field_5142, this.field_5143, this.field_5144);
+        GlStateManager.translatef(this.offsetX, this.offsetY, this.offsetZ);
         if (this.posX != 0.0f || this.posY != 0.0f || this.posZ != 0.0f) 
         {
             GlStateManager.pushMatrix();
@@ -101,7 +101,7 @@ public class ModelPartMixin
             {
                 GlStateManager.rotatef(this.posX * 57.295776f, 1.0f, 0.0f, 0.0f);
             }
-            //GlStateManager.callList(this.field_1612);
+            //GlStateManager.callList(this.glList);
             CallListField1612();
             if (this.modelList != null) 
             {
@@ -115,7 +115,7 @@ public class ModelPartMixin
         else if (this.pivotX != 0.0f || this.pivotY != 0.0f || this.pivotZ != 0.0f) 
         {
             GlStateManager.translatef(this.pivotX * scale, this.pivotY * scale, this.pivotZ * scale);
-            //GlStateManager.callList(this.field_1612);
+            //GlStateManager.callList(this.glList);
             CallListField1612();
             if (this.modelList != null) 
             {
@@ -128,7 +128,7 @@ public class ModelPartMixin
         } 
         else 
         {
-            //GlStateManager.callList(this.field_1612);
+            //GlStateManager.callList(this.glList);
             CallListField1612();
             if (this.modelList != null) 
             {
@@ -138,12 +138,12 @@ public class ModelPartMixin
                 }
             }
         }
-        GlStateManager.translatef(-this.field_5142, -this.field_5143, -this.field_5144);
+        GlStateManager.translatef(-this.offsetX, -this.offsetY, -this.offsetZ);
     }
 
     public void method_1193(float f) 
     {
-        if (this.field_1605) 
+        if (this.hide) 
         {
             return;
         }
@@ -151,9 +151,9 @@ public class ModelPartMixin
         {
             return;
         }
-        if (!this.field_1611) 
+        if (!this.compiledList) 
         {
-            this.method_1196(f);
+            this.compileList(f);
         }
         GlStateManager.pushMatrix();
         GlStateManager.translatef(this.pivotX * f, this.pivotY * f, this.pivotZ * f);
@@ -169,15 +169,15 @@ public class ModelPartMixin
         {
             GlStateManager.rotatef(this.posZ * 57.295776f, 0.0f, 0.0f, 1.0f);
         }
-        //GlStateManager.callList(this.field_1612);
+        //GlStateManager.callList(this.glList);
         CallListField1612();
         GlStateManager.popMatrix();
     }
 
     @Overwrite
-    private void method_1196(float scale) 
+    private void compileList(float scale) 
     {
-        this.field_1612 = 4;
+        this.glList = 4;
 
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(7, VertexFormats.ENTITY);
@@ -222,7 +222,7 @@ public class ModelPartMixin
 
         bufferBuilder.reset();
 
-        this.field_1611 = true;
+        this.compiledList = true;
     }
 
     private void CallListField1612()

@@ -12,7 +12,7 @@ import net.minecraft.client.world.BuiltChunk;
 public class ChunkBuilderMixin 
 {
     @Overwrite
-    private void method_10125(BufferBuilder bufferBuilder, int i, BuiltChunk builtChunk)
+    private void uploadGlList(BufferBuilder bufferBuilder, int i, BuiltChunk builtChunk)
     {
         //NOTE: To my knowledge, this function doesn't get called when VBOs are turned on.
         return;
