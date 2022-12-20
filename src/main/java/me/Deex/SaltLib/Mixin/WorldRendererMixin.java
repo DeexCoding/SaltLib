@@ -28,7 +28,7 @@ import net.minecraft.util.math.Vec3d;
 public class WorldRendererMixin 
 {
     @Shadow
-    private void method_9922() {}
+    private void renderEndSky() {}
 
     @Shadow
     @Final
@@ -38,13 +38,13 @@ public class WorldRendererMixin
     private ClientWorld world;
     
     @Shadow
-    private boolean field_10817;
+    private boolean vbo;
 
     @Shadow
-    private VertexBuffer field_10826;
+    private VertexBuffer lightSkyBuffer;
 
     @Shadow
-    private int field_1924 = -1;
+    private int lightSkyList = -1;
     
     @Shadow
     @Final
@@ -59,22 +59,22 @@ public class WorldRendererMixin
     private static Identifier MOON_PHASES;
 
     @Shadow
-    private VertexBuffer field_10827;
+    private VertexBuffer darkSkyBuffer;
     
     @Shadow
     private VertexBuffer starsBuffer;
 
     @Shadow
-    private int field_1925;
+    private int darkSkyList;
     
     @Shadow
-    private int field_1923; //Render command list for stars
+    private int starsList; //Render command list for stars
     
     @Shadow
-    private VertexFormat field_10824;
+    private VertexFormat skyVertexFormat;
 
     @Overwrite
-    public void method_9891(float f, int i) 
+    public void renderSky(float f, int i) 
     {
         float w;
         float v;
@@ -85,7 +85,7 @@ public class WorldRendererMixin
         float n;
         if (this.client.world.dimension.getType() == 1) 
         {
-            this.method_9922();
+            this.renderEndSky();
             return;
         }
         if (!this.client.world.dimension.canPlayersSleep()) 
@@ -111,18 +111,18 @@ public class WorldRendererMixin
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
         GlStateManager.color3f(g, h, j); //Not sure
-        if (this.field_10817) 
+        if (this.vbo) 
         {
-            this.field_10826.bind();
+            this.lightSkyBuffer.bind();
             //GL11.glEnableClientState(32884); //Position
             GL11.glVertexPointer(3, 5126, 12, 0L);
-            this.field_10826.draw(7);
-            this.field_10826.unbind();
+            this.lightSkyBuffer.draw(7);
+            this.lightSkyBuffer.unbind();
             //GL11.glDisableClientState(32884); //Position
         } 
         else 
         {
-            //GlStateManager.callList(this.field_1924);
+            //GlStateManager.callList(this.lightSkyList);
             CallListField1924();
         }
         GlStateManager.disableFog();
@@ -197,7 +197,7 @@ public class WorldRendererMixin
         if (z > 0.0f) 
         {
             GlStateManager.color4f(z, z, z, z);
-            if (this.field_10817) 
+            if (this.vbo) 
             {
                 this.starsBuffer.bind();
                 //GL11.glEnableClientState(32884); //Position
@@ -208,7 +208,7 @@ public class WorldRendererMixin
             } 
             else 
             {
-                //GlStateManager.callList(this.field_1923);
+                //GlStateManager.callList(this.starsList);
                 CallListField1923();
             }
         }
@@ -224,18 +224,18 @@ public class WorldRendererMixin
         {
             GlStateManager.pushMatrix();
             GlStateManager.translatef(0.0f, 12.0f, 0.0f);
-            if (this.field_10817) 
+            if (this.vbo) 
             {
-                this.field_10827.bind();
+                this.darkSkyBuffer.bind();
                 //GL11.glEnableClientState(32884); //Position
                 GL11.glVertexPointer(3, 5126, 12, 0L);
-                this.field_10827.draw(7);
-                this.field_10827.unbind();
+                this.darkSkyBuffer.draw(7);
+                this.darkSkyBuffer.unbind();
                 //GL11.glDisableClientState(32884); //Position
             } 
             else 
             {
-                //GlStateManager.callList(this.field_1925);
+                //GlStateManager.callList(this.darkSkyList);
                 CallListField1925();
             }
             GlStateManager.popMatrix();
@@ -273,7 +273,7 @@ public class WorldRendererMixin
         }
         GlStateManager.pushMatrix();
         GlStateManager.translatef(0.0f, -((float)(d - 16.0)), 0.0f);
-        //GlStateManager.callList(this.field_1925);
+        //GlStateManager.callList(this.darkSkyList);
         CallListField1925();
         GlStateManager.popMatrix();
         GlStateManager.enableTexture();
@@ -282,28 +282,28 @@ public class WorldRendererMixin
     }
 
     @Shadow
-    private void method_9919() 
+    private void renderDarkSky() 
     {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        if (this.field_10827 == null) 
+        if (this.darkSkyBuffer == null) 
         {
-            this.field_10827 = new VertexBuffer(this.field_10824);
+            this.darkSkyBuffer = new VertexBuffer(this.skyVertexFormat);
         }
-        if (this.field_1925 >= 0) 
+        if (this.darkSkyList >= 0) 
         {
-            //GlAllocationUtils.deleteSingletonList(this.field_1925);
-            this.field_1925 = -1;
+            //GlAllocationUtils.deleteSingletonList(this.darkSkyList);
+            this.darkSkyList = -1;
         }
-        if (this.field_10817) 
+        if (this.vbo) 
         {
             this.renderSkyHalf(bufferBuilder, -16.0f, true);
             bufferBuilder.end();
             bufferBuilder.reset();
-            this.field_10827.data(bufferBuilder.getByteBuffer());
+            this.darkSkyBuffer.data(bufferBuilder.getByteBuffer());
         } else {
-            this.field_1925 = 3;
-            //GL11.glNewList(this.field_1925, 4864); //GL_COMPILE
+            this.darkSkyList = 3;
+            //GL11.glNewList(this.darkSkyList, 4864); //GL_COMPILE
             //this.renderSkyHalf(bufferBuilder, -16.0f, true); //Doesn't contain gl calls?
             //tessellator.draw();
             //GL11.glEndList();
@@ -320,29 +320,29 @@ public class WorldRendererMixin
     }
 
     @Overwrite
-    private void method_9920() 
+    private void renderLightSky() 
     {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        if (this.field_10826 == null) 
+        if (this.lightSkyBuffer == null) 
         {
-            this.field_10826 = new VertexBuffer(this.field_10824);
+            this.lightSkyBuffer = new VertexBuffer(this.skyVertexFormat);
         }
-        if (this.field_1924 >= 0) 
+        if (this.lightSkyList >= 0) 
         {
-            //GlAllocationUtils.deleteSingletonList(this.field_1924);
-            this.field_1924 = -1;
+            //GlAllocationUtils.deleteSingletonList(this.lightSkyList);
+            this.lightSkyList = -1;
         }
-        if (this.field_10817) 
+        if (this.vbo) 
         {
             this.renderSkyHalf(bufferBuilder, 16.0f, false);
             bufferBuilder.end();
             bufferBuilder.reset();
-            this.field_10826.data(bufferBuilder.getByteBuffer());
+            this.lightSkyBuffer.data(bufferBuilder.getByteBuffer());
         } else 
         {
-            this.field_1924 = 2;
-            //GL11.glNewList(this.field_1924, 4864); //GL_COMPILE
+            this.lightSkyList = 2;
+            //GL11.glNewList(this.lightSkyList, 4864); //GL_COMPILE
             //this.renderSkyHalf(bufferBuilder, 16.0f, false); //Doesn't contain gl calls?
             //tessellator.draw();
             //GL11.glEndList();
@@ -365,14 +365,14 @@ public class WorldRendererMixin
 
         if (this.starsBuffer == null)
         {
-            this.starsBuffer = new VertexBuffer(this.field_10824);
+            this.starsBuffer = new VertexBuffer(this.skyVertexFormat);
         }
-        if (this.field_1923 >= 0) 
+        if (this.starsList >= 0) 
         {
-            //GlAllocationUtils.deleteSingletonList(this.field_1923);
-            this.field_1923 = -1;
+            //GlAllocationUtils.deleteSingletonList(this.starsList);
+            this.starsList = -1;
         }
-        if (this.field_10817) 
+        if (this.vbo) 
         {
             this.renderStars(bufferBuilder);
             bufferBuilder.end();
@@ -381,9 +381,9 @@ public class WorldRendererMixin
         } 
         else 
         {
-            this.field_1923 = 5;
+            this.starsList = 5;
             //GlStateManager.pushMatrix();
-            //GL11.glNewList(this.field_1923, 4864); //GL_COMPILE
+            //GL11.glNewList(this.starsList, 4864); //GL_COMPILE
             //this.renderStars(bufferBuilder); //Doesn't contain gl calls?
             //tessellator.draw();
             //GL11.glEndList();
