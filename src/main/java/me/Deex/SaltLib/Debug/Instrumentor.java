@@ -37,7 +37,8 @@ public class Instrumentor
         }
         catch (Exception e)
         {
-
+            System.out.println("[SaltLib] Could not end a profiling session!");
+            e.printStackTrace();
         }
     }
 
@@ -50,7 +51,8 @@ public class Instrumentor
         }
         catch (Exception e)
         {
-
+            System.out.println("[SaltLib] Error in WriteHeader!");
+            e.printStackTrace();
         }
     }
 
@@ -63,7 +65,8 @@ public class Instrumentor
         }
         catch (Exception e)
         {
-
+            System.out.println("[SaltLib] Error in WriteFooter!");
+            e.printStackTrace();
         }
     }
 
