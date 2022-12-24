@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public abstract class ChunkRenderHelperImplMixin extends BuiltChunk
 {
     @Redirect(method="<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/GlAllocationUtils;genLists(I)I"))
-    public static synchronized int redirect(int i) 
+    private static synchronized int redirect(int i)
     {
         return -1;
     }
