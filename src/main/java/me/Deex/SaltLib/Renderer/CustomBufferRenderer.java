@@ -4,15 +4,23 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.mojang.blaze3d.platform.GLX;
 
+import me.Deex.SaltLib.SaltLibMod;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormatElement;
+import net.minecraft.client.util.math.Matrix4f;
 
-public class CustomBufferRenderer 
+public class CustomBufferRenderer
 {
+    public static int vao;
+    public static int vbo;
+
     private static void InternalDraw(ByteBuffer byteBuffer, VertexFormat vertexFormat, int vertexCount, int drawMode)
     {
         if (vertexCount <= 0) 
@@ -34,6 +42,58 @@ public class CustomBufferRenderer
             {
                 case POSITION: 
                 {
+                    /*int startPos = byteBuffer.position();
+
+                    for (int v = 0; v < vertexCount; ++v)
+                    {
+                        byteBuffer.position(startPos + v * stride);
+                        float x = 0.0f;
+                        float y = 0.0f;
+                        float z = 0.0f;
+
+                        switch(vertexFormatElement.getFormat())
+                        {
+                        case UNSIGNED_INT:
+                        case INT:
+                        case FLOAT:
+                        {
+                            x = byteBuffer.getFloat();
+                            y = byteBuffer.getFloat();
+                            z = byteBuffer.getFloat();
+                        } break;
+                        
+                        case UNSIGNED_SHORT: 
+                        case SHORT:
+                        {
+                            x = (float)byteBuffer.getShort();
+                            y = (float)byteBuffer.getShort();
+                            z = (float)byteBuffer.getShort();
+                        } break;
+                        
+                        case UNSIGNED_BYTE: 
+                        case BYTE:
+                        {
+                            x = (float)byteBuffer.get();
+                            y = (float)byteBuffer.get();
+                            z = (float)byteBuffer.get();
+                        } break;
+                        }
+
+                        Vector4f point = new Vector4f(x, y, z, 1.0f);
+                        point = Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_MODELVIEW).GetTop(), point, point);
+                        point = Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_PROJECTION).GetTop(), point, point);
+                        x = point.x / point.w;
+                        y = point.y / point.w;
+                        z = point.z / point.w;
+
+                        byteBuffer.position(startPos + v * stride);
+                        byteBuffer.putFloat(x);
+                        byteBuffer.putFloat(y);
+                        byteBuffer.putFloat(z);
+                    }
+
+                    byteBuffer.position(startPos);*/
+
                     GL11.glVertexPointer(vertexFormatElement.getCount(), vertexTypeID, stride, byteBuffer);
                     GL11.glEnableClientState(32884);
                     break;
@@ -65,7 +125,11 @@ public class CustomBufferRenderer
             }
         }
 
+        //GL20.glUseProgram(SaltLibMod.defaultShader.glProgram);
+        //GL30.glBindVertexArray(vao);
         GL11.glDrawArrays(drawMode, 0, vertexCount);
+        //GL30.glBindVertexArray(0);
+        //GL20.glUseProgram(0);
 
         //No need to unbind textures, clear colors, they will get set once we need them
         //NOTE: Altough we need to disable coloring, texturing and everything else, because the next Draw won't disable it for itself

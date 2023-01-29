@@ -1,12 +1,14 @@
 package me.Deex.SaltLib;
 
 import me.Deex.SaltLib.Debug.Instrumentor;
+import me.Deex.SaltLib.Renderer.GLShader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class SaltLibMod implements ClientModInitializer 
 {
 	public static boolean enableProfiling;
+	public static GLShader defaultShader;
 
 	@Override
 	public void onInitializeClient() 
@@ -17,7 +19,7 @@ public class SaltLibMod implements ClientModInitializer
 
 		OnStartup();
 
-		System.out.println("SaltLib initalized");
+		System.out.println("[SaltLib] Initalized successfully");
 	}
 
 	private static void OnStartup()

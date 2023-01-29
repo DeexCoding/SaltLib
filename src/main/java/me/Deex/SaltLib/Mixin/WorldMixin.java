@@ -111,7 +111,7 @@ public abstract class WorldMixin
                 
                 if (aboveState.getBlock() instanceof RedstoneWireBlock) 
                 {
-                    power = Math.max(power, ((RedstoneWireBlock)state.getBlock()).getData(state) - 1);
+                    power = Math.max(power, ((RedstoneWireBlock)aboveState.getBlock()).getData(aboveState) - 1);
                 }
             }
         } 
@@ -122,7 +122,7 @@ public abstract class WorldMixin
             
             if (belowState.getBlock() instanceof RedstoneWireBlock) 
             {
-                power = Math.max(power, ((RedstoneWireBlock)state.getBlock()).getData(state) - 1);
+                power = Math.max(power, ((RedstoneWireBlock)belowState.getBlock()).getData(belowState) - 1);
             }
         }
         

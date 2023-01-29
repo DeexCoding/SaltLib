@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 @Mixin(ChunkRenderHelperImpl.class)
 public abstract class ChunkRenderHelperImplMixin extends BuiltChunk
 {
+    //TODO: Doesn't work, I am losing my mind
     @Redirect(method="<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/GlAllocationUtils;genLists(I)I"))
     private static synchronized int redirect(int i)
     {
