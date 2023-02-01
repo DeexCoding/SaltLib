@@ -28,13 +28,13 @@ public class GLXMixin
 	{
 		//NOTE: Ground work for switching to VAOs from old vbo-only rendering
 
-		/*if (FabricLoader.getInstance().isDevelopmentEnvironment())
+		if (FabricLoader.getInstance().isDevelopmentEnvironment())
 		{
 			//GL11.glEnable(GL43.GL_DEBUG_OUTPUT);
 			//GL43.glDebugMessageCallback(new KHRDebugCallback());
 		}
 
-		/*SaltLibMod.defaultShader = new GLShader("/assets/saltlib/DefaultVertexShader.glsl", 
+		SaltLibMod.defaultShader = new GLShader("/assets/saltlib/DefaultVertexShader.glsl", 
 			"/assets/saltlib/DefaultFragmentShader.glsl");
 
 		GL20.glUseProgram(0);
@@ -46,11 +46,12 @@ public class GLXMixin
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, CustomBufferRenderer.vbo);
 		
 		GL30.glBindVertexArray(0);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);*/
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
-		/*MatrixStack.CreateGLStacks();
-		MatrixStack.GetGLStack(GL11.GL_MODELVIEW).Translate(new Vector3f(0.1f, 0.0f, 0.0f));
+		MatrixStack.CreateGLStacks();
+		//MatrixStack.GetGLStack(GL11.GL_PROJECTION).Translate(new Vector3f(1000000.0f, 0.0f, 0.0f));
 		
-		System.out.println("[SaltLib] Initalized OpenGL stuff");*/
+		System.out.println("[SaltLib] Initalized OpenGL stuff");
 	}
 }
+// 

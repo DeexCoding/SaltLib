@@ -10,10 +10,13 @@
   [
     "BufferBuilderMixin",
     "BufferRendererMixin",
+    "GlStateManagerMixin",
     "GLXMixin",
     "MinecraftClientMixin",
     "ModelBoxAccessor",
+    "ProjectMixin",
     "RealmsNotificationScreenMixin",
+    "TextRendererMixin",
     "TexturedQuadAccessor",
     "WorldMixin"
   ],

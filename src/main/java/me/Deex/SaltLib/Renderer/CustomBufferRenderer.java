@@ -6,6 +6,8 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Matrix;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.mojang.blaze3d.platform.GLX;
@@ -14,7 +16,6 @@ import me.Deex.SaltLib.SaltLibMod;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormatElement;
-import net.minecraft.client.util.math.Matrix4f;
 
 public class CustomBufferRenderer
 {
@@ -42,14 +43,15 @@ public class CustomBufferRenderer
             {
                 case POSITION: 
                 {
-                    /*int startPos = byteBuffer.position();
+                    int startPos = byteBuffer.position();
+
+                    float x = 0.0f;
+                    float y = 0.0f;
+                    float z = 0.0f;
 
                     for (int v = 0; v < vertexCount; ++v)
                     {
                         byteBuffer.position(startPos + v * stride);
-                        float x = 0.0f;
-                        float y = 0.0f;
-                        float z = 0.0f;
 
                         switch(vertexFormatElement.getFormat())
                         {
@@ -92,7 +94,7 @@ public class CustomBufferRenderer
                         byteBuffer.putFloat(z);
                     }
 
-                    byteBuffer.position(startPos);*/
+                    byteBuffer.position(startPos);
 
                     GL11.glVertexPointer(vertexFormatElement.getCount(), vertexTypeID, stride, byteBuffer);
                     GL11.glEnableClientState(32884);
@@ -100,6 +102,30 @@ public class CustomBufferRenderer
                 }
                 case UV: 
                 {
+                    int startPos = byteBuffer.position();
+
+                    float x = 0.0f;
+                    float y = 0.0f;
+
+                    for (int v = 0; v < vertexCount; ++v)
+                    {
+                        byteBuffer.position(startPos + v * stride);
+
+                        x = byteBuffer.getFloat();
+                        y = byteBuffer.getFloat();
+
+                        Vector4f point = new Vector4f(x, y, 0.0f, 1.0f);
+                        point = Matrix4f.transform(MatrixStack.GetGLStack(GL11.GL_TEXTURE).GetTop(), point, point);
+                        x = point.x / point.w;
+                        y = point.y / point.w;
+
+                        byteBuffer.position(startPos + v * stride);
+                        byteBuffer.putFloat(x);
+                        byteBuffer.putFloat(y);
+                    }
+
+                    byteBuffer.position(startPos);
+
                     GLX.gl13ClientActiveTexture(GLX.textureUnit + vertexFormatElement.getIndex());
                     GL11.glTexCoordPointer(vertexFormatElement.getCount(), vertexTypeID, stride, byteBuffer);
                     GL11.glEnableClientState(32888);
